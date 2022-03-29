@@ -7,6 +7,18 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        //除了当前动作以外的其他动作都需要登录
+        $this->middleware('auth',[
+           'except' =>['create','show','store']
+        ]);
+        $this->middleware('guest',[
+           'only' =>['create']
+        ]);
+    }
+
+
     //创建用户
     public function create()
     {
@@ -38,10 +50,12 @@ class UsersController extends Controller
 
     //修改个人用户信息页面
     public function edit(User $user){
+        $this->authorize('update', $user);
         return view('users.edit',compact('user'));
     }
     //更新用户信息
     public function update(User $user,Request $request){
+        $this->authorize('update', $user);
         $this->validate($request,[
             'name' =>'required|max:50',
             'password' => 'nullable|confirmed|min:6'
