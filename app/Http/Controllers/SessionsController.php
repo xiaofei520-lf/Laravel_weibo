@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-class SessionController extends Controller
+class SessionsController extends Controller
 {
     //
     public function create(){
@@ -16,7 +16,7 @@ class SessionController extends Controller
             'email' => 'required|email|max:255',
             'password' => 'required'
         ]);
-        if(Auth::attempt($credentials)){
+        if(Auth::attempt($credentials,$request->has('remember'))){
             //登录成功后的操作
             session()->flash('success','欢迎回来！');
             return redirect()->route('users.show',[Auth::user()]);
@@ -26,5 +26,11 @@ class SessionController extends Controller
             return redirect()->back()->withInput();
         }
 
+    }
+
+    public function destroy(){
+        Auth::logout();
+        session()->flash('success','您已成功退出');
+        return redirect('login');
     }
 }
