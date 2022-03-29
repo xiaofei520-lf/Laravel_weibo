@@ -11,13 +11,17 @@ class UsersController extends Controller
     {
         //除了当前动作以外的其他动作都需要登录
         $this->middleware('auth',[
-           'except' =>['create','show','store']
+           'except' =>['create','show','store','index']
         ]);
         $this->middleware('guest',[
            'only' =>['create']
         ]);
     }
-
+    //显示所有的用户
+    public function index(){
+        $users = User::all();
+        return view('users.index',compact('users'));
+    }
 
     //创建用户
     public function create()
