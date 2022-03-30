@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 use App\Models\Status;
+use function Symfony\Component\Console\Style\comment;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -65,6 +67,34 @@ class User extends Authenticatable
     public function feed(){
         return $this->statuses()->orderBy('created_at','desc');
     }
+    //获取粉丝关系列表
+    public function followers(){
+        return $this->belongsToMany(User::class,'followers','user_id','follower_id');
+    }
+    //获取yoghurt关注人列表
+    public function followings(){
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id');
+    }
+    //关注
+    public function follow($user_ids){
+        if(! is_array($user_ids)){
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->sync($user_ids,false);
+    }
+    //取消关注
+    public function unfollow($user_ids){
+        if(! is_array($user_ids)){
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->detach($user_ids);
+    }
+    //判断当前用户是否关注了指定用户
+    public function isFollowing($user_id){
+        return $this->followings->contains($user_id);
+    }
+
+
 
 
 }
