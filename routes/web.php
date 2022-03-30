@@ -21,8 +21,7 @@ Route::resource('users', 'UsersController');
 Route::get('login','SessionsController@create')->name('login');//显示登录页面
 Route::post('login','SessionsController@store')->name('login');//创建新会话（登录）
 Route::delete('logout','SessionsController@destroy')->name('logout');//销毁回话（退出登录）
-//用户激活 邮箱验证
-Route::get('signup/confirm/{token}','UsersController@confirmEmail')->name('confirm_email');
+
 //忘记密码
 //填写Email的表单
 Route::get('password/reset',  'PasswordController@showLinkRequestForm')->name('password.request');
@@ -32,3 +31,5 @@ Route::post('password/email',  'PasswordController@sendResetLinkEmail')->name('p
 Route::get('password/reset/{token}',  'PasswordController@showResetForm')->name('password.reset');
 //对提交过来的token和email数据进行配对，正确的话更新密码
 Route::post('password/reset',  'PasswordController@reset')->name('password.update');
+//用户激活 邮箱验证
+Route::get('signup/confirm/{token}','UsersController@confirmEmail')->name('confirm_email');
