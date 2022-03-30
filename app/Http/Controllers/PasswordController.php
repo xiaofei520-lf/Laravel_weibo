@@ -12,11 +12,23 @@ use Illuminate\Support\Facades\Hash;
 
 class PasswordController extends Controller
 {
+    //限流
+    public function __construct()
+    {
+        //针对控制器方法 showLinkRequestForm() 做了限流，一分钟内只能允许访问两次。
+        $this->middleware('throttle:2,1',[
+           'only' => ['showLinkRequestForm']
+        ]);
+        //发送密码重置邮件 3分钟之内，只能发送10次
+        $this->middleware('throttle:3,10',[
+           'only' => ['sendResetLinkEmail']
+        ]);
+    }
     //显示发送邮件页面
     public function showLinkRequestForm(){
       return view('auth.passwords.email');
     }
-    //处理找回密码邮件的逻辑
+    //处理找回密码邮件的逻辑 发送密码重置邮件
     public function sendResetLinkEmail(Request $request){
         //1.验证邮箱
         $request->validate(['email' => 'required|email']);

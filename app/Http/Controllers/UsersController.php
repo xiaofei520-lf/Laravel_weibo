@@ -18,6 +18,10 @@ class UsersController extends Controller
         $this->middleware('guest',[
            'only' =>['create']
         ]);
+        //限流 一个小时只能提交10次请求
+        $this->middleware('throttle:10,60',[
+            'only'=>['store']
+        ]);
     }
     //显示所有的用户
     public function index(){
@@ -25,7 +29,7 @@ class UsersController extends Controller
         return view('users.index',compact('users'));
     }
 
-    //创建用户
+    //创建用户界面
     public function create()
     {
         return view('users.create');
