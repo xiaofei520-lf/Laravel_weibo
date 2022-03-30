@@ -35,5 +35,5 @@ Route::post('password/reset',  'PasswordController@reset')->name('password.updat
 Route::get('signup/confirm/{token}','UsersController@confirmEmail')->name('confirm_email');
 
 Route::resource('statuses','StatusesController',['only' =>
-    'store','destroy'
+    ['store','destroy']
 ]);
