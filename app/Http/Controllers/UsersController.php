@@ -102,7 +102,7 @@ class UsersController extends Controller
         $data = compact('user');
         $name = 'Xiaocainiao';
         $to = $user->email;
-        $subject = '"感谢注册 Weibo 应用！请确认你的邮箱。';
+        $subject = '感谢注册 Weibo 应用！请确认你的邮箱。';
 
         Mail::send($view, $data, function ($message) use ( $name, $to, $subject) {
             $message->to($to)->subject($subject);
