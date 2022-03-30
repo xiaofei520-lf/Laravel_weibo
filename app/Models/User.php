@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
+use App\Models\Status;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -53,6 +54,12 @@ class User extends Authenticatable
     public function gravatar($size = '100'){
         $hash = md5(strtolower(trim($this->attributes['email'])));
         return "https://cdn.v2ex.com/gravatar/$hash?s=$size";
+    }
+
+    //获取当前用户的所有微博
+    public function statuses()
+    {
+        return $this->hasMany(Status::class);
     }
 
 
